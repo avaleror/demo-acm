@@ -4,7 +4,7 @@ kind: PlacementRule
 metadata:
   labels:
       app: book-import
-  name: book-import-placement-0
+  name: book-import-pr
   namespace: book-import
 spec:
   clusterSelector:

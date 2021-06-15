@@ -1,0 +1,9 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: nginx-sample-ch
+  namespace: nginx-sample
+spec:
+  type: GitHub
+  pathname: https://github.com/avaleror/demo-acm.git
