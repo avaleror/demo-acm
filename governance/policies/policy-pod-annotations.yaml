@@ -1,47 +1,55 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-trusted-node
+  name: policy-pod-annotations
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: CM Configuration Management
     policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
 spec:
-  remediationAction: inform
   disabled: false
   policy-templates:
     - objectDefinition:
-        apiVersion: policies.ibm.com/v1alpha1
-        kind: TrustedNodePolicy
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
         metadata:
-          name: example-trustednodepolicy
+          name: policy-pod-annotation
         spec:
+          remediationAction: inform # will be overridden by remediationAction in parent policy
           severity: low
           namespaceSelector:
-            include: ["default"]
-          remediationAction: inform
+            exclude: ["kube-*","openshift-*"]
+            include: ["*"]
+          object-templates:
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  annotations:
+                    podnoise.io/podnoise_log_rows_total: "0"
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-trusted-node
+  name: binding-policy-pod-annotations
 placementRef:
-  name: placement-policy-trusted-node
+  name: placement-policy-pod-annotations
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-- name: policy-trusted-node
+- name: policy-pod-annotations
   kind: Policy
   apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-trusted-node
+  name: placement-policy-pod-annotations
 spec:
   clusterConditions:
   - status: "True"
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - {key: environment, operator: In, values: ["dev"]}
+      - {key: podnoise, operator: In, values: ["enabled"]}
