@@ -7,7 +7,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-comp-operator
+  name: policy-comp-oper-setting
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: CA Security Assessment and Authorization
@@ -75,45 +75,24 @@ spec:
                   name: default
                   kind: ScanSetting
                   apiGroup: compliance.openshift.io/v1alpha1
-#    - objectDefinition:
-#        apiVersion: policy.open-cluster-management.io/v1
-#        kind: ConfigurationPolicy
-#        metadata:
-#          name: comp-operator-subscription
-#        spec:
-#          remediationAction: inform  # will be overridden by remediationAction in parent policy
-#          severity: high
-#          object-templates:
-#            - complianceType: musthave
-#              objectDefinition:
-#                apiVersion: operators.coreos.com/v1alpha1
-#                kind: Subscription
-#                metadata:
-#                  name: compliance-operator
-#                  namespace: openshift-compliance
-#                spec:
-#                  installPlanApproval: Automatic
-#                  name: compliance-operator
-#                  source: redhat-operators
-#                  sourceNamespace: openshift-marketplace
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-comp-operator
+  name: binding-policy-comp-oper-setting
 placementRef:
-  name: placement-policy-comp-operator
+  name: placement-policy-comp-oper-setting
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: policy-comp-operator
+  - name: policy-comp-oper-setting
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-comp-operator
+  name: placement-policy-comp-oper-setting
 spec:
   clusterConditions:
     - status: "True"
