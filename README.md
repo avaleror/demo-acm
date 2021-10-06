@@ -1,2 +1,2 @@
 # acm-demo
-Repo to deliver RH ACM product demos
+Repo to deliver basic RH ACM product demos
